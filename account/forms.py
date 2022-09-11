@@ -23,7 +23,7 @@ class AddNewUser(UserCreationForm):
         email = cleaned_data.get('email')
         if email:
             if User.objects.filter(email=email).exists():
-                raise ValidationError("User with this email address is already exist.")
+                 raise ValidationError("User with this email address is already exist.")
         else:
             raise ValidationError("Please add email address")
         return self.cleaned_data
@@ -43,7 +43,7 @@ class UpdateUser(forms.ModelForm):
         cleaned_data = super(UpdateUser, self).clean()
         email = cleaned_data.get('email')
         if email:
-            if User.objects.filter(email=email).exists():
+            if User.objects.filter(email=email).exclude(email=self.instance.email).exists():
                 raise ValidationError("User with this email address is already exist.")
         else:
             raise ValidationError("Please add email address")
