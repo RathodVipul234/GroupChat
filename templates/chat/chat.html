@@ -1,0 +1,115 @@
+{% include 'base.html' %}
+{% load static %}
+
+{% block extra-css %}
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="frame">
+    <div id="sidepanel">
+        <div id="profile">
+            <div class="wrap">
+                <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
+                <p>{{request.user}}</p>
+                <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                <div id="status-options">
+                    <ul>
+                        <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+                        <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+                        <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+                        <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+                    </ul>
+                </div>
+                <div id="expanded">
+                    <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" value="mikeross" />
+                    <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" value="ross81" />
+                    <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" value="mike.ross" />
+                </div>
+            </div>
+        </div>
+
+        <div id="contacts">
+            <h3 class="text-center"><b>members</b></h3>
+            <ul>
+                {% for contact in grp.members.all %}
+                    <a href="#" class="active text-decoration-none text-white">
+                        <li class="contact {% if chat_room_user.username == contact.username %} active {% endif %}">
+                            <div class="wrap">
+                                <span class="contact-status online"></span>
+                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <div class="meta">
+                                    <p class="name">{{contact.username}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                {% endfor %}
+               
+            </ul>
+        </div>
+       
+    </div>
+    <div class="content">
+        <div class="contact-profile">
+            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                <p>Goup name : <b>{{grp.name}}</b></p>
+            <div class="social-media">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+                 <i class="fa fa-instagram" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="messages">
+            <ul id="message_room"> 
+                {% for message in chat_history %}
+
+                    {% if message.sender == request.user %}
+                    <li class="replies">
+                        <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+                        <p>{{message.text}}</p>
+                    </li>
+                    {% else %}
+                    <li class="sent">
+                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                        <p style="width: 100%">
+                        {{message.text}}
+                        <br>
+                        <span style="float: right; font-weight: 800">By {{message.sender}}</span></p>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="message-input">
+            <div class="wrap">
+            <input type="text" id="chat-message-input" placeholder="Write your message..." />
+            <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+            <button class="submit" id="chat-message-submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra-js %}
+
+<!-- External cookies.js file for csrf token validation -->
+
+<script>
+    const send_by_user = "{{request.user.username}}"
+    let roomName = "{{grp.id}}"
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'js/chat.js' %}"></script>
+
+
+{% endblock %}

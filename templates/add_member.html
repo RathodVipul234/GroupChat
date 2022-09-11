@@ -1,0 +1,37 @@
+<div class="modal-body">
+	{% if grp.members.all %}
+	<table class="table">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th scope="col">Id</th>
+	      <th scope="col">Email</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	{% for i in grp.members.all %}
+	    <tr>
+	      <th scope="row">{{forloop.counter}}</th>
+	      <td>{{i.email}}</td>
+	    </tr>
+	  {% endfor %}
+	  </tbody>
+	</table>
+	{% endif %}
+	{% if rmaining_users %}
+	<form method="POST" action="{% url 'add_new_user_in_grp' grp.id %}">
+		{% csrf_token %}
+	  <div class="form-group">
+	    <label for="exampleFormControlSelect1">Add user</label>
+	    <select class="form-control" name="new_user" id="exampleFormControlSelect1">
+    	{% for usr in rmaining_users %}
+  			<option value="{{usr.email}}">{{usr.email}}</option>
+    	{% endfor %}
+	    </select>
+	  </div>
+	  <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add user</button>
+      </div>
+	</form>
+	{% endif %}
+</div>

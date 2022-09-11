@@ -1,0 +1,15 @@
+{% include 'base.html' %}
+<style>
+    .errorlist{
+        color:red;
+    }
+</style>
+<div class="jumbotron">
+    <h1 class="text-center">Add New Group</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <a  href="#">forgot password?</a><br>
+        <button type="submit" class="btn btn-primary">Create Group</button>
+    </form>
+</div>

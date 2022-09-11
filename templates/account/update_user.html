@@ -1,0 +1,14 @@
+{% include 'base.html' %}
+<style>
+    .errorlist{
+        color:red;
+    }
+</style>
+<div class="jumbotron">
+    <h1 class="text-center">Update User Details</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>

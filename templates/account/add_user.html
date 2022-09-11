@@ -1,0 +1,14 @@
+{% include 'base.html' %}
+<style>
+    .errorlist{
+        color:red;
+    }
+</style>
+<div class="jumbotron" style="margin:0px auto; padding:0px auto;">
+    <h1 class="text-center">Registration Form</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+    <button type="submit" class="btn btn-primary">Signup</button>
+    </form>
+</div>

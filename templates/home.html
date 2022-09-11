@@ -1,0 +1,71 @@
+{% load static %}
+{% include 'base.html' %}
+
+{% block content %}
+<div class="container">
+	{% if request.user.is_authenticated %}
+	<a href="{% url 'create_group' %}" class="btn btn-primary float-right">Create Group<a>
+	<div class="jumbotron">
+		<h1> My Groups</h1>
+		<div class="container">
+		  <div class="row">
+		  	{% for grp in groups %}
+		  	<div class="card col-4">
+			  <div class="card-body">
+			    <h5 class="card-title">{{grp.name}}</h5>
+			    <a href="{% url 'chat_room' grp.slug %}" class="btn btn-primary">Chat</a>
+			    {% if grp.admin == request.user %}
+			    <a href="{% url 'delete_grp' grp.slug %}" class="btn btn-danger">delete</a>
+				<button id="{{grp.id}}" type="button" class="btn btn-primary add-member" data-toggle="modal" data-target="#add_member" 
+				data-url="{% url 'get_remaining_user' grp.id %}">
+					Add member
+				</button>
+				{% endif %}
+			  </div>
+			</div>
+			{% endfor %}
+			<div class="modal fade" id="add_member" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Add user to your {{grp}} group</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="render_to_string">
+			      	
+			      </div>
+			      
+			    </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block extra-js %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script type="text/javascript">
+	$(".add-member").on('click', function(e){
+		let grp_url = $(this).attr("data-url")
+		$.ajax(
+    {
+        type:"GET",
+        url: grp_url,
+        success: function(data) 
+        {
+        	if (data['status'] == 200){
+        		$(".render_to_string").html(data['html'])
+        	}
+        }
+     })
+	})
+	
+</script>
+{% endblock %}
+
